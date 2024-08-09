@@ -8,33 +8,27 @@ def loadImage(file):
 
     return photoFormat
 
-def convertImage(file):
+def convertImage(file, format):
     photo = Image.open(file)
+    selectedFormat = format
     buffer = io.BytesIO()
-    photo.save(buffer, format="BMP")
+    photo.save(buffer, format=selectedFormat)
 
     convertedPhoto = buffer.getvalue()
 
     return convertedPhoto
-'''
-    def convertImageToPNG(file):
-    photo = Image.open(file)
-    buffer = io.BytesIO()
-    photo.save(buffer, format="PNG")
 
-    convertedPhotoPng = buffer.getvalue()
-    buffer.close()
+def photoChange(uploadedFile, options):
+    photoFormat = loadImage(uploadedFile)
+    st.write(f"O formato da imagem inserida é: {photoFormat}")
+    if photoFormat == "PNG" or photoFormat == "JPEG" or photoFormat == "BMP":
+        options.remove(photoFormat)
+        selectedFormat = st.selectbox("Selecione formato para conversão", options)
 
-    return convertedPhotoPng
+        if selectedFormat != "-":
+            st.write(f"Faça o download da foto em {selectedFormat}:")
+            convertedPhoto = convertImage(uploadedFile, selectedFormat)
+            st.download_button('download', convertedPhoto, mime=f"image/{selectedFormat}")
 
-def convertImageToJPEG(file):
-    photo = Image.open(file)
-    buffer = io.BytesIO()
-    photo = photo.convert("RGB")
-    photo.save(buffer, format="JPEG")
-
-    convertedPhotoJpeg = buffer.getvalue()
-    buffer.close()
-
-    return convertedPhotoJpeg
-    '''
+    else:
+        st.write(f"O formato {photoFormat} não é suportado para conversão")
