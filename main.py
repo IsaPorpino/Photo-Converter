@@ -1,45 +1,6 @@
-from PIL import Image
-import io
 import streamlit as st
+from functions import *
 
-def loadImage(file):
-    photo = Image.open(file)
-    photoFormat = photo.format
-    st.write(f"O formato da imagem inserida é: {photoFormat}")
-
-    return photoFormat
-    #photo.show()
-    #photo.save('./img/Taytay.bmp', 'BMP')
-
-def convertImageToBMP(file):
-    photo = Image.open(file)
-    buffer = io.BytesIO()
-    photo.save(buffer, format="BMP")
-
-    convertedPhotoBmp = buffer.getvalue()
-
-    return convertedPhotoBmp
-
-def convertImageToPNG(file):
-    photo = Image.open(file)
-    buffer = io.BytesIO()
-    photo.save(buffer, format="PNG")
-
-    convertedPhotoPng = buffer.getvalue()
-    buffer.close()
-
-    return convertedPhotoPng
-
-def convertImageToJPEG(file):
-    photo = Image.open(file)
-    buffer = io.BytesIO()
-    photo = photo.convert("RGB")
-    photo.save(buffer, format="JPEG")
-
-    convertedPhotoJpeg = buffer.getvalue()
-    buffer.close()
-
-    return convertedPhotoJpeg
 def interface():
     st.title('Conversor de Imagens')
     uploadedFile = st.file_uploader('Insira a sua imagem:')
@@ -50,12 +11,22 @@ def interface():
         st.write(f"O formato da imagem inserida é: {photoFormat}")
 
         if photoFormat == "PNG":
-            bmpPhoto = convertImageToBMP(uploadedFile)
-            jpegPhoto = convertImageToJPEG(uploadedFile)
+            convertedPhoto = convertImage(uploadedFile)
+            st.download_button('download BMP', convertedPhoto, mime="image/bmp")
+            st.download_button('download JPG', convertedPhoto, mime="image/jpg")
 
-            st.download_button('download BMP', bmpPhoto)
-            st.download_button('download JPG', jpegPhoto)
+        elif photoFormat == "JPG":
+            convertedPhoto = convertImage(uploadedFile)
+            st.download_button('download PNG', convertedPhoto, mime="image/png")
+            st.download_button('download BMP', convertedPhoto, mime="image/bmp")
 
+        elif photoFormat == "BMP":
+            convertedPhoto = convertImage(uploadedFile)
+            st.download_button('download PNG', convertedPhoto, mime="image/png")
+            st.download_button('download JPG', convertedPhoto, mime="image/jpg")
+
+        else:
+            st.write(f"O formato {photoFormat} não é suportado para conversão")
 
 if __name__ == '__main__':
     #loadImage()
