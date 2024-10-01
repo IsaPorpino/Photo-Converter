@@ -1,17 +1,21 @@
 import streamlit as st
-from functions import *
 
-def interface():
-    st.title('Conversor de Imagens')
-    options = ["-","PNG", "BMP", "JPEG"]
-    uploadedFile = st.file_uploader('Insira a sua imagem:')
+import conversor
+from conversor import conversorFormatoPage
+from home import homePage
 
-    if uploadedFile is not None:
-        photoChange(uploadedFile, options)
+pages = {
+    "Informações": [
+        st.Page(homePage, title="Home")
+    ],
+    "Conversores":  [
+        st.Page(conversorFormatoPage, title="Conversor de Formato")
+    ]
+    }
+nav = st.navigation(pages)
+nav.run()
 
 
-if __name__ == '__main__':
-    #loadImage()
-    interface()
+
 
 
