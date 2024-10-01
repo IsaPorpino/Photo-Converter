@@ -1,7 +1,5 @@
 import streamlit as st
-
-import conversor
-from conversor import conversorFormatoPage
+from conversor import conversorFormatoPage, conversorCorPage
 from home import homePage
 
 pages = {
@@ -9,7 +7,8 @@ pages = {
         st.Page(homePage, title="Home")
     ],
     "Conversores":  [
-        st.Page(conversorFormatoPage, title="Conversor de Formato")
+        st.Page(conversorFormatoPage, title="Conversor de Formato"),
+        st.Page(conversorCorPage, title="Conversor de Cor")
     ]
     }
 nav = st.navigation(pages)
